@@ -11,8 +11,8 @@ graph_t *parse_graph (const char *filename){
         fprintf(stderr, "wrong file name!!!!!\n");
         exit(1);
     }
-    char s_name [256];
-    char t_name [256];
+    char s_name [257];
+    char t_name [257];
 
     int c= fscanf (file, "digraph %s {\n", &s_name[0]);
     if (c!=1){
@@ -20,6 +20,12 @@ graph_t *parse_graph (const char *filename){
         fclose (file);
         exit (1);
     }
+    if (strlen(s_name) >= 256) {
+    fprintf(stderr, "Graph name is too longgggg\n");
+    fclose(file);
+    exit(0);
+}
+    
     graph_t *graph =init_graph (s_name);
     if (!graph){
         fprintf(stderr, "Error while initializing the graph");
