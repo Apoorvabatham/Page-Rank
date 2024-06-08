@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "graphparse.h"
+#include "graph.h"
 
 graph_t *parse_graph (const char *filename){
     FILE *file = fopen (filename, "r");

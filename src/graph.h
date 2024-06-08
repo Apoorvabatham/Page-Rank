@@ -1,5 +1,5 @@
 #ifndef GRAPH_H
-#define GRAPH_h
+#define GRAPH_H
 
 typedef struct vertice {
     struct vertice **out_edges;
