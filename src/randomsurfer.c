@@ -13,6 +13,7 @@
 
 void simulate_rs (graph_t *graph, int no_steps, double p) {
     rand_init();
+
     int start_s = randu(graph->count);
 
     struct Visited visited[graph->count];
@@ -23,32 +24,28 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
     }
 
     int current_s = start_s;
-    char nem [256];
 
     for(int i = 0; i<no_steps; i++){
-        if( randu(100)< p){
+        if( randu(100)< p*100){
             current_s= randu(graph->count);
         }else{
+            if (graph->vertices[current_s]->num_edges> 0) {
             int edge_index = randu( graph-> vertices[current_s]-> num_edges);
-            strcpy( nem, graph->vertices[current_s]->out_edges[edge_index]->name);
-            for(int j=0; j<graph->count;j++){
-            if (!strcmp(nem, graph->vertices[j]->name)){
-                current_s=j;
+           vertice_t *next_vertice = graph->vertices[current_s]->out_edges[edge_index];
+
+           for(int j=0; j<graph->count; j++){
+                if (graph->vertices[j]== next_vertice){
+                    current_s= j;
+                    break;
+                }
+           }
             }
         }
-        }
-        for(int j=0; j<graph->count;j++){
-            if (!strcmp(nem, visited[j].name))
-            visited[j].times++;
-        }
+        visited[current_s].times++;
     }
     for(int i=0; i<graph->count; i++){
     printf("%s  ",visited[i].name);
-    if(visited[i].times==0){
-        printf("0.0\n");
-
-    }else{
-    printf("%f\n",(float)(visited[i].times)/graph->count);}
+    printf("%f\n",(float)(visited[i].times)/no_steps);
     }
 
 }
