@@ -52,7 +52,7 @@ int main(int argc, char *const *argv) {
             break;
 
             case 'm': no_steps = atoi (optarg);
-            mm=1;
+            mm=0;
             break;
 
             case 'p':p= atof(optarg);
