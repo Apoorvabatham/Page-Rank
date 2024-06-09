@@ -6,7 +6,7 @@
 #include "graph.h"
 
     struct Visited {
-    float times;
+    unsigned times;
     };
 
 void simulate_rs (graph_t *graph, int no_steps, double p) {
