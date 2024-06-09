@@ -47,7 +47,6 @@ vertice_t *get_vertice (graph_t *graph, const char *name){
     vertice->out_edges= NULL;
     vertice->num_edges = 0;
     vertice->in_edges= 0;
-    vertice->num_out_neighbor = NULL;
     vertice ->name = calloc(strlen(name) +1, sizeof(char));
     if (!vertice->name){
         free (vertice);

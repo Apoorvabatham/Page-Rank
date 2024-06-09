@@ -26,10 +26,10 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
     int current_s = start_s;
 
     for(int i = 0; i<no_steps; i++){
-        if( randu(100)< p*100){
+        if( randu(RAND_MAX/RAND_MAX)< p){
             current_s= randu(graph->count);
         }else{
-            if (graph->vertices[current_s]->num_edges> 0) {
+            if (graph->vertices[current_s]->num_edges!= 0) {
             int edge_index = randu( graph-> vertices[current_s]-> num_edges);
            vertice_t *next_vertice = graph->vertices[current_s]->out_edges[edge_index];
 
@@ -46,7 +46,7 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
         visited[current_s].times++;
     }
     for(int i=0; i<graph->count; i++){
-    printf("%s  ",visited[i].name);
+    printf("%s ",visited[i].name);
     printf("%f\n",(float)(visited[i].times)/no_steps);
     }
 
