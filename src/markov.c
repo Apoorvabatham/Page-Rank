@@ -42,7 +42,7 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
 
     if(graph== NULL || graph->count==0) return;
 
-    if (p==1.0){
+    if (p==100){
          for (int i = 0; i< graph->count; i++){
         printf("%s %.10f\n", graph->vertices[i]->name, (1.0/(double)graph->count));
     }
