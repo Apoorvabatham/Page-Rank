@@ -25,10 +25,11 @@ void free_graph (graph_t *graph){
     if (!graph) return;
     while(graph->count--){
         vertice_t *vertice= graph-> vertices [graph->count];
+        if (vertice){
         if (vertice-> num_edges)
             free (vertice-> out_edges);
         free (vertice->name);
-        free (vertice);
+        free (vertice);}
     }
     free (graph->name);
     free(graph-> vertices);
@@ -67,7 +68,6 @@ graph->vertices = temp;
 void add_edge (vertice_t* source, vertice_t *target){
     vertice_t **temp = realloc(source->out_edges, (source->num_edges + 1) * sizeof(vertice_t *));
     if (!temp) {
-        free(source->out_edges);
     return;}
     source->out_edges = temp;
     source->out_edges[source->num_edges++]= target;
