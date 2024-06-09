@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "markov.h"
 #include "graph.h"
 
@@ -11,21 +10,22 @@ void calculate_Tprob (graph_t *graph, double p, double **tp){
 
         if (current_v->num_edges>0){
 
-                for(int y; y<graph->count;y++){
-                    tp[i][y]= p/ graph->count;
-                }
             for(int j=0; j<current_v->num_edges; j++){
                 vertice_t *target_v= current_v->out_edges[j];
-                int tv_num;
+                int tv_num =-1;
                     for(int k=0; k<graph->count; k++){
                         if(target_v==graph->vertices[k]){
                             tv_num= k;
                             break;
                         }
                     }
-                 tp[i][tv_num] += (1-p)/current_v->num_edges; 
+                    if (tv_num!= -1){
+                        tp[i][tv_num]= (1-p)/ current_v->num_edges;
+                    }
             }
-
+                 for(int y; y<graph->count;y++){
+                    tp[i][y]+= p/ graph->count;
+                }    
         }else{
          for(int x= 0; x<graph->count;x++){
             tp[i][x] += (double)1.0/graph->count;
