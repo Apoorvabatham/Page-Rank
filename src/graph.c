@@ -41,7 +41,7 @@ vertice_t *get_vertice (graph_t *graph, const char *name){
     vertice->out_edges= NULL;
     vertice->num_edges = 0;
     vertice->in_edges= 0;
-    vertice-> something= 0;
+    vertice->num_out_neighbor = NULL;
     vertice ->name = calloc(strlen(name) +1, sizeof(char));
     strcpy(vertice->name, name);
     vertice_t **temp = realloc(graph->vertices, (graph->count + 1) * sizeof(vertice_t *));
@@ -55,7 +55,7 @@ graph->vertices = temp;
     return vertice;
 }
 
-void add_edge (vertice_t *source, vertice_t *target){
+void add_edge (vertice_t* source, vertice_t *target){
     vertice_t **temp = realloc(source->out_edges, (source->num_edges + 1) * sizeof(vertice_t *));
     if (!temp) {
     return;}

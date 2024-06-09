@@ -11,13 +11,15 @@
 #include "graphparse.h"
 #include "randomsurfer.h"
 #include "graph.h"
+#include "markov.h"
 
 
 int main(int argc, char *const *argv) {
 
-    int kk;
+    int mm=0;
+    int kk=0;
     int opt;
-    int no_steps;
+    int no_steps=0;
     double p =0.1;
     char *filename =NULL;
     if (argc<=1) exit (1);
@@ -32,28 +34,26 @@ int main(int argc, char *const *argv) {
             printf("  -s    Compute and print the statistics of the graph as defined \n");
             printf("          in section 3.4\n");
             printf("  -p P  Set the parameter p to P%%. (Default : P = 10)\n");}
-            exit(0); 
+            break;
             
-            case 's':if (optind<argc){
+            case 's':{if (optind<argc){
                 filename = argv[optind];
             graph_t *graph= parse_graph (filename);
             print_stats(graph);
             free_graph (graph);
-            exit (0);}
+            }
             else{ printf ("No file name provided\n");
                     exit (1);
             }
+            }break;
 
             case 'r':no_steps = atoi (optarg);
             kk= 1;
             break;
 
-            case 'm':if (optind<argc){
-                filename = argv[optind]; exit (0);
-            }else{
-                 printf ("No file name provided\n");
-                    exit (1);
-                 }
+            case 'm': no_steps = atoi (optarg);
+            mm=1;
+            break;
 
             case 'p':p= atof(optarg);
                 break;
@@ -61,6 +61,7 @@ int main(int argc, char *const *argv) {
             default : printf("error\n"); exit (1);
         } 
     }
+
   if (kk==1){if (optind<argc){
                 filename = argv[optind];
                 if(filename==NULL){
@@ -79,6 +80,23 @@ int main(int argc, char *const *argv) {
                     exit (1);
                  }}
 
+  if (mm==1){if (optind<argc){
+                filename = argv[optind];
+                if(filename==NULL){
+                    printf("MISSING FILENAME\n");
+                    exit(1);
+                }
+                graph_t *graph= parse_graph (filename);
+                if (graph->count==0) {
+                    exit (0);
+                  free_graph (graph);}
+                simulate_markov(graph, no_steps, p);
+                free_graph (graph);
+                exit (0);
+            }else{
+                 printf ("No file name provided\n");
+                    exit (1);
+                 }}
   // initialize the random number generator
   rand_init();
 

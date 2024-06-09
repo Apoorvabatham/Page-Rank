@@ -3,7 +3,7 @@
 
 typedef struct vertice {
     struct vertice **out_edges;
-    unsigned something;
+    unsigned *num_out_neighbor;
     unsigned in_edges;
     unsigned num_edges;
     char* name;

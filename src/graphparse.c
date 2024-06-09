@@ -56,7 +56,7 @@ graph_t *parse_graph (const char *filename){
             fclose(file);
             exit(1);
         }
-        add_edge (s_vertice, t_vertice);
+        add_edge ( s_vertice, t_vertice);
     }
 
     fclose (file);
