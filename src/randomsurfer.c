@@ -23,7 +23,7 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
     int current_s = start_s;
 
     for(int i = 0; i<no_steps; i++){
-        if( randu(RAND_MAX/RAND_MAX)< p){
+        if( randu(100)< p){
             current_s= randu(graph->count);
         }else{
             if (graph->vertices[current_s]->num_edges==0) {
