@@ -19,7 +19,8 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
     struct Visited visited[graph->count];
 
     for(int i=0; i<graph->count; i++){
-        strcpy(visited[i].name ,graph->vertices[i]->name);
+        strncpy(visited[i].name ,graph->vertices[i]->name, sizeof(visited[i].name) - 1);
+        visited[i].name[sizeof(visited[i].name)-1]= '\0';
         visited[i].times=0;
     }
 
@@ -39,6 +40,8 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
                     break;
                 }
            }
+            }else {
+                current_s= randu(graph->count);
             }
         }
         visited[current_s].times++;
