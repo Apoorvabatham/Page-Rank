@@ -47,7 +47,7 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
     }
     for(int i=0; i<graph->count; i++){
     printf("%s ",visited[i].name);
-    printf("%f\n",(float)(visited[i].times)/no_steps);
+    printf("%.10f\n",(double)(visited[i].times)/(double)no_steps);
     }
 
 }
