@@ -20,6 +20,7 @@ void calculate_Tprob (graph_t *graph, double p, double **tp){
                     for(int k=0; k<graph->count; k++){
                         if(target_v==graph->vertices[k]){
                             tv_num= k;
+                            break;
                         }
                     }
                  tp[i][tv_num] += (1-p)/current_v->num_edges; 
@@ -36,14 +37,20 @@ void calculate_Tprob (graph_t *graph, double p, double **tp){
 void simulate_markov (graph_t *graph, int no_steps, double p) {
 
     if(graph== NULL || graph->count==0) return;
-     double **tp = calloc(graph->count,sizeof(double *));
+     double **tp = malloc(graph->count *sizeof(double));
     if (tp == NULL) {
+        free(tp);
         fprintf(stderr, "Memory allocation failed for tp.\n");
         exit(1);
     }
     for (int i = 0; i < graph->count; i++) {
         tp[i] = calloc(graph->count, sizeof(double));
         if (tp[i] == NULL) {
+            
+    for(int a=0; a<graph->count; a++){
+        free(tp[a]);
+    }
+    free(tp); 
             fprintf(stderr, "Memory allocation failed for rows of tp.\n");
             exit(1);
         }
@@ -55,10 +62,18 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
 
     if (current_vector == NULL || next_vector == NULL) {
         fprintf(stderr, "Memory allocation failed for vectors.\n");
+        
+    free (current_vector);
+    free (next_vector);
+    
+    for(int a=0; a<graph->count; a++){
+        free(tp[a]);
+    }
+    free(tp); 
         exit(1);
     }
     for (int i = 0; i < graph->count; i++) {
-        current_vector[i] = (double)1.0 /graph->count;
+        current_vector[i] = 1.0 /graph->count;
     }
     
     calculate_Tprob (graph, p, tp);
