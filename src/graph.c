@@ -12,6 +12,11 @@ graph_t *init_graph (const char *name){
     graph->vertices = NULL;
     graph->count = 0;
     graph-> name = calloc (strlen(name)+1, sizeof (char));
+    if (!graph->name){
+        free (graph);
+         fprintf (stderr, "memory exhausted for allocating graph name\n");
+        exit(1);
+    }
     strcpy(graph->name, name);
     return graph;
 }
@@ -43,6 +48,10 @@ vertice_t *get_vertice (graph_t *graph, const char *name){
     vertice->in_edges= 0;
     vertice->num_out_neighbor = NULL;
     vertice ->name = calloc(strlen(name) +1, sizeof(char));
+    if (!vertice->name){
+        free (vertice);
+        return NULL;
+    }
     strcpy(vertice->name, name);
     vertice_t **temp = realloc(graph->vertices, (graph->count + 1) * sizeof(vertice_t *));
     if (!temp) {
@@ -58,6 +67,7 @@ graph->vertices = temp;
 void add_edge (vertice_t* source, vertice_t *target){
     vertice_t **temp = realloc(source->out_edges, (source->num_edges + 1) * sizeof(vertice_t *));
     if (!temp) {
+        free(source->out_edges);
     return;}
     source->out_edges = temp;
     source->out_edges[source->num_edges++]= target;
