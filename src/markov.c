@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "markov.h"
 #include "graph.h"
 
@@ -7,73 +8,84 @@ void calculate_Tprob (graph_t *graph, double p, double **tp){
 
     for (int i=0; i<graph->count; i++){
         vertice_t *current_v = graph->vertices[i];
-
-        if (current_v->num_edges>0){
-
-            for(int j=0; j<current_v->num_edges; j++){
-                vertice_t *target_v= current_v->out_edges[j];
-                int tv_num =-1;
-                    for(int k=0; k<graph->count; k++){
-                        if(target_v==graph->vertices[k]){
-                            tv_num= k;
-                            break;
-                        }
-                    }
-                    if (tv_num!= -1){
-                        tp[i][tv_num]= (1-p)/ current_v->num_edges;
-                    }
+        int total_out = current_v->num_edges;
+              double sum= 0.0;
+        if (p == 1.0) {
+            for (int j = 0; j < graph->count; j++) {
+                if (total_out != 0) {
+                    if (current_v->num_out_neighbor[j] > 0)
+                        tp[i][j] = 1.0;
+                    else
+                        tp[i][j] = 0.0;
+                } else {
+                    tp[i][j] = 1.0 / (double)graph->count;
+                }
             }
-                 for(int y; y<graph->count;y++){
-                    tp[i][y]+= p/ graph->count;
-                }    
-        }else{
-         for(int x= 0; x<graph->count;x++){
-            tp[i][x] += (double)1.0/graph->count;
-         }   
-        }  
+        } else {        
+        for(int j= 0; j< graph->count; j++){
+            if (total_out!=0){
+                tp [i] [j] = (p/ (double)graph->count) +(1.0-p)*((double)current_v->num_out_neighbor[j]/(double)total_out);
+            }else{
+                tp [i][j]= p/(double)graph->count;
+            }
+            sum += tp [i][j];
+        }
+        if (sum != 1.0) {
+            for (int j = 0; j < graph->count; j++) {
+                tp[i][j] /= sum;}
+            }
+        }
     }
 }
 
 void simulate_markov (graph_t *graph, int no_steps, double p) {
 
     if(graph== NULL || graph->count==0) return;
-     double **tp = malloc(graph->count *sizeof(double));
+
+    if (p==100){
+         for (int i = 0; i< graph->count; i++){
+        printf("%s %.10f\n", graph->vertices[i]->name, (1.0/(double)graph->count));
+    }
+
+        exit(0);
+    }
+
+    for(int i =0; i< graph->count; i++){
+        graph->vertices[i]->num_out_neighbor= calloc(graph->count, sizeof(unsigned));
+         if (graph->vertices[i]->num_out_neighbor == NULL) {
+            fprintf(stderr, "Memory allocation failed for num_out_neighbor.\n");
+            exit(1);
+        }
+        for(int j=0; j< graph->vertices[i]->num_edges; j++){
+            for (int k= 0; k< graph->count; k++){
+                if(strcmp(graph->vertices[i]->out_edges[j]->name, graph->vertices[k]->name )==0){
+                    graph->vertices[i]->num_out_neighbor[k]++;
+                }
+            }
+        }
+    }
+
+     double **tp = calloc(graph->count, sizeof(double *));
     if (tp == NULL) {
-        free(tp);
         fprintf(stderr, "Memory allocation failed for tp.\n");
         exit(1);
     }
     for (int i = 0; i < graph->count; i++) {
         tp[i] = calloc(graph->count, sizeof(double));
         if (tp[i] == NULL) {
-            
-    for(int a=0; a<graph->count; a++){
-        free(tp[a]);
-    }
-    free(tp); 
             fprintf(stderr, "Memory allocation failed for rows of tp.\n");
             exit(1);
         }
     }
 
     double *current_vector = calloc(graph->count, sizeof(double));
-
     double *next_vector = calloc(graph->count, sizeof(double));
-
     if (current_vector == NULL || next_vector == NULL) {
         fprintf(stderr, "Memory allocation failed for vectors.\n");
-        
-    free (current_vector);
-    free (next_vector);
-    
-    for(int a=0; a<graph->count; a++){
-        free(tp[a]);
-    }
-    free(tp); 
         exit(1);
     }
     for (int i = 0; i < graph->count; i++) {
-        current_vector[i] = 1.0 /graph->count;
+        current_vector[i] = 1.0 / (double)graph->count;
     }
     
     calculate_Tprob (graph, p, tp);
@@ -85,7 +97,7 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
                 next_vector[i] += current_vector[j] *tp [j][i];
             }
         }
-        
+
         for (int k= 0; k< graph->count; k++){
             current_vector[k]= next_vector[k];
         }
@@ -94,10 +106,12 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
     for (int i = 0; i< graph->count; i++){
         printf("%s %.10f\n", graph->vertices[i]->name, current_vector[i]);
     }
-    for(int a=0; a<graph->count; a++){
-        free(tp[a]);
+
+    for (int i=0; i<graph->count; i++){
+        free (graph->vertices[i]->num_out_neighbor);
+        free (tp[i]);
     }
-    free(tp);   
+    free(tp);
     free (current_vector);
     free (next_vector);
 }
