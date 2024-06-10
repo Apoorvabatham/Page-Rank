@@ -1,0 +1,13 @@
+digraph EdgecaseGraph {
+source -> cycle1;
+cycle1 -> cycle2;
+cycle2 -> cycle3;
+cycle3 -> cycle4;
+cycle4 -> cycle5;
+cycle5 -> cycle1;
+cycle2 -> selfsink;
+selfsink -> selfsink;
+disconnected1 -> disconnected2;
+disconnected2 -> disconnected1;
+self -> self;
+}

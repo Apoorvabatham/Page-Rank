@@ -1,0 +1,3 @@
+digraph SimpleSink {
+node1 -> node2;
+}
