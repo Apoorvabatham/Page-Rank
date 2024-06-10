@@ -12,16 +12,16 @@ graph_t *parse_graph (const char *filename){
         fprintf(stderr, "wrong file name!!!!!\n");
         exit(1);
     }
-    char s_name [257];
-    char t_name [257];
+    char s_name [260];
+    char t_name [260];
 
-    int c= fscanf (file, "digraph %256s {\n", &s_name[0]);
+    int c= fscanf (file, "digraph %s {\n", &s_name[0]);
     if (c!=1){
         fprintf(stderr,"Error while parsing graph definition.\n");
         fclose (file);
         exit (0);
     }
-    if (strlen(s_name) >= 256) {
+    if (strlen(s_name) >=260) {
     fprintf(stderr, "Graph name is too longgggg\n");
     fclose(file);
     exit(0);
@@ -35,8 +35,8 @@ graph_t *parse_graph (const char *filename){
     }
     
     while (1){
-    memset(s_name, 0, 256);
-    memset(s_name, 0, 256);
+    memset(s_name, 0, 260);
+    memset(s_name, 0, 260);
         c= fscanf(file, "%s -> %s;\n", &s_name[0], &t_name[0]);
         
         if (s_name[0] == '}') break;
