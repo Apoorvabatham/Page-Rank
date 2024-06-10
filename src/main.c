@@ -82,14 +82,15 @@ int main(int argc, char *const *argv) {
 
   if (mm==1){if (optind<argc){
                 filename = argv[optind];
-                if(filename==NULL){
+                if(filename==NULL|| no_steps==0|| p== 0){
                     printf("MISSING FILENAME\n");
                     exit(1);
                 }
                 graph_t *graph= parse_graph (filename);
                 if (graph->count==0) {
+                    free_graph (graph);
                     exit (0);
-                  free_graph (graph);}
+                  }
                 simulate_markov(graph, no_steps, p);
                 free_graph (graph);
                 exit (0);

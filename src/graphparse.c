@@ -12,10 +12,10 @@ graph_t *parse_graph (const char *filename){
         fprintf(stderr, "wrong file name!!!!!\n");
         exit(1);
     }
-    char s_name [257];
-    char t_name [257];
+    char s_name [256];
+    char t_name [256];
 
-    int c= fscanf (file, "digraph %s {\n", &s_name[0]);
+    int c= fscanf (file, "digraph %255s {\n", &s_name[0]);
     if (c!=1){
         fprintf(stderr,"Error while parsing graph definition.\n");
         fclose (file);

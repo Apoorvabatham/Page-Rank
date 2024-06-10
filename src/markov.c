@@ -54,7 +54,7 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
         graph->vertices[i]->num_out_neighbor= calloc(graph->count, sizeof(unsigned));
          if (graph->vertices[i]->num_out_neighbor == NULL) {
             fprintf(stderr, "Memory allocation failed for num_out_neighbor.\n");
-            exit(1);
+            exit(0);
         }
         for(int j=0; j< graph->vertices[i]->num_edges; j++){
             for (int k= 0; k< graph->count; k++){
@@ -68,13 +68,13 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
      double **tp = calloc(graph->count, sizeof(double *));
     if (tp == NULL) {
         fprintf(stderr, "Memory allocation failed for tp.\n");
-        exit(1);
+        exit(0);
     }
     for (int i = 0; i < graph->count; i++) {
         tp[i] = calloc(graph->count, sizeof(double));
         if (tp[i] == NULL) {
             fprintf(stderr, "Memory allocation failed for rows of tp.\n");
-            exit(1);
+            exit(0);
         }
     }
 
@@ -82,7 +82,7 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
     double *next_vector = calloc(graph->count, sizeof(double));
     if (current_vector == NULL || next_vector == NULL) {
         fprintf(stderr, "Memory allocation failed for vectors.\n");
-        exit(1);
+        exit(0);
     }
     for (int i = 0; i < graph->count; i++) {
         current_vector[i] = 1.0 / (double)graph->count;
