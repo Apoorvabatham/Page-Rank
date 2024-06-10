@@ -49,7 +49,7 @@ void simulate_markov (graph_t *graph, int no_steps, double p) {
 
         exit(0);
     }
-
+    if (p!= 0.1){p=p/100;}
     for(int i =0; i< graph->count; i++){
         graph->vertices[i]->num_out_neighbor= calloc(graph->count, sizeof(unsigned));
          if (graph->vertices[i]->num_out_neighbor == NULL) {
