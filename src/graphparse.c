@@ -38,7 +38,14 @@ graph_t *parse_graph (const char *filename){
     memset(s_name, 0, 256);
     memset(s_name, 0, 256);
         c= fscanf(file, "%s -> %s;\n", &s_name[0], &t_name[0]);
+
         if (s_name[0] == '}') break;
+         if (c== EOF){
+            fprintf (stderr, "Error in file while reading\n");
+            fclose(file);
+            exit(1);
+        }
+        
         int length = strlen(t_name);
         if (t_name[length-1]==';'){
             t_name[length-1]= '\0';
@@ -46,12 +53,7 @@ graph_t *parse_graph (const char *filename){
             fclose(file);
             exit(1);
         }
-        if (c== EOF){
-            fprintf (stderr, "Error in file while reading\n");
-            fclose(file);
-            exit(1);
-        }
-        
+       
         vertice_t *s_vertice = get_vertice (graph, s_name);
          if (!s_vertice) {
             fprintf(stderr, "Error getting vertice.\n");
