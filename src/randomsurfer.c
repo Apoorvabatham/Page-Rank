@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "randomsurfer.h"
 #include "utils.h"
 #include "graph.h"
 
     struct Visited {
-    unsigned times;
+    int times;
     };
 
 void simulate_rs (graph_t *graph, int no_steps, double p) {
     rand_init();
+    if (p==0.1){p=p*100;}
 
     int start_s = randu(graph->count);
 
@@ -43,7 +43,7 @@ void simulate_rs (graph_t *graph, int no_steps, double p) {
     }
     for(int i=0; i<graph->count; i++){
     printf("%s ",graph->vertices[i]->name);
-    printf("%.10f\n",(double)(visited[i].times)/no_steps);
+    printf("%.10f\n",(double)(((double)visited[i].times)/((double)no_steps)));
     }
 
 }
